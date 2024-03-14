@@ -1,11 +1,12 @@
 import http, { Server, IncomingMessage, ServerResponse } from "http";
 import url from "url";
 
-interface Product {
+type Product = {
   id: string;
   name: string;
   price: number;
-}
+};
+
 // fake database
 let products: Product[] = [
   { id: "1", name: "product1", price: 1 },
@@ -24,13 +25,14 @@ const server: Server = http.createServer(
       // without end => end
       res.end("Hello, World!\n");
     }
-    if (req.method === "GET" && req.url === "/products") {
+
+    if (req.method === "GET" && req.url === "/api/v1/products") {
       console.log(req.url, "url");
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify(products));
     }
 
-    if (req.method === "POST" && req.url === "/products") {
+    if (req.method === "POST" && req.url === "/api/v1/products") {
       // send data to nodejs - stream - small part => collect then use
       let body = "";
       req.on("data", (chunk) => {
@@ -49,7 +51,7 @@ const server: Server = http.createServer(
     if (
       req.method === "DELETE" &&
       req.url &&
-      req.url.startsWith("/products/")
+      req.url.startsWith("/api/v1/products/")
     ) {
       const productId = req.url.split("/")[2];
       products = products.filter((item) => item.id !== productId);
@@ -63,7 +65,11 @@ const server: Server = http.createServer(
       //  then restart the server
     }
 
-    if (req.method === "PUT" && req.url && req.url.startsWith("/products/")) {
+    if (
+      req.method === "PUT" &&
+      req.url &&
+      req.url.startsWith("/api/v1/products/")
+    ) {
       const productId = req.url.split("/")[2];
       let body = "";
       req.on("data", (chunk) => {

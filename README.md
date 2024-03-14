@@ -35,8 +35,7 @@ The minimum requirements of the project.
 - Change password (username, old password, new password)
 
 3. Admin
-
-Special users with certain privileges
+   Special users with certain privileges
 
 - Add a new product, update info of a product, remove a product
 - Ban a user, unban a user
