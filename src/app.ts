@@ -1,29 +1,42 @@
-import express, { Request, Response } from "express";
+import express from "express";
+import cors from "cors";
+import mongoose from "mongoose";
 
+import { logger } from "./utils/logger";
+import { config } from "./utils/config";
 import productsRouter from "./routers/productsRouter";
+import categoriesRouter from "./routers/categoriesRouter";
+import {
+  errorHandler,
+  requestLogger,
+  unknownEndpoint,
+} from "./utils/middleware";
 
-
-const PORT = 8080;
-
-// create a server with express
+mongoose.set("strictQuery", false);
 const app = express();
+if (config.MONGODB_URI) {
+  logger.info("connecting to", config.MONGODB_URI);
+  mongoose
+    .connect(config.MONGODB_URI)
+    .then(() => {
+      logger.info("connected to MongoDB");
+    })
+    .catch((error) => {
+      logger.error("error connection to MongoDB: " + error.message);
+    });
+} else {
+  logger.error("MongoDB URI undefined");
+}
+
+app.use(cors());
+app.use(express.static("dist"));
 app.use(express.json());
+app.use(requestLogger);
 
-// method
-// endpoint
-// data
-
-app.get("/", (request: Request, response: Response) => {
-  // logic
-  //   response.status(200).send("Hello, World!");
-  //   response.status(200).json("Hello, World!");
-  response.status(200).json({ message: "Hello world!" });
-});
-
-// base endpoint
-// http://localhost:8080/api/v1/products/
 app.use("/api/v1/products", productsRouter);
+app.use("/api/v1/categories", categoriesRouter);
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+app.use(unknownEndpoint);
+app.use(errorHandler);
+
+export default app;
