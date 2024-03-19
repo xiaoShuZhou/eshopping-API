@@ -1,3 +1,7 @@
+# ER diagram
+
+![ER Diagram](readmePic/ER%20diagram.png)
+
 # Backend Assignment - API
 
 This is the README for an Express backend assignment that requires you to implement the REST APIs for an E-commerce based on the Entity-Relationship Diagram (ERD) assignment. The ERD assignment should outline the data model, including the relationships and attributes of entities within the system. You are tasked with designing and documenting the REST APIs according to the ERD specifications.
