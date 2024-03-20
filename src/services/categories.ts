@@ -17,27 +17,27 @@ const createCategory = async (
 };
 
 // To do: handle error
-const getCategoryById = async (
-  id: string
+const getCategoryByName = async (
+  name: string
 ): Promise<CategoryDocument | undefined> => {
-  const foundCategory = await Category.findById(id);
+  const foundCategory = await Category.findById(name);
   if (foundCategory) {
     return foundCategory;
   }
 };
 
-const deleteCategoryById = async (id: string) => {
-  const foundCategory = await Category.findByIdAndDelete(id);
+const deleteCategoryByName = async (name: string) => {
+  const foundCategory = await Category.findByIdAndDelete(name);
   if (foundCategory) {
     return foundCategory;
   }
 };
 
 const updateCategory = async (
-  id: string,
+  name: string,
   newInformation: Partial<CategoryDocument>
 ) => {
-  const updatedCategory = await Category.findByIdAndUpdate(id, newInformation, {
+  const updatedCategory = await Category.findByIdAndUpdate(name, newInformation, {
     new: true,
   });
   return updatedCategory;
@@ -46,6 +46,6 @@ const updateCategory = async (
 export default {
   getAllCategories,
   createCategory,
-  getCategoryById,
-  deleteCategoryById,
+  getCategoryByName,
+  deleteCategoryByName,
 };
