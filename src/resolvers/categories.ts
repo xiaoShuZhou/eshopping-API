@@ -1,10 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 
-import categoriesService from "../services/categories";
 import { InternalServerError, NotFoundError } from "../errors/ApiError";
 import Category from "../models/Category";
-
-// always has try catch in controller
 
 export async function getAllCategories(
   _: Request,
@@ -12,7 +9,7 @@ export async function getAllCategories(
   next: NextFunction
 ) {
   try {
-    const categories = await categoriesService.getAllCategories();
+    const categories = await Category.find();
     response.status(200).json(categories);
   } catch (error) {
     next(new InternalServerError("Internal error"));
@@ -25,14 +22,11 @@ export async function createCategory(
   next: NextFunction
 ) {
   try {
-    const newData = new Category(request.body);
-    const newCategory = await categoriesService.createCategory(newData);
-    response.status(201).json(newCategory);
-    // pass validation
-    // throw 400
+    let newData = new Category(request.body);
+    newData = await newData.save()
+    response.status(201).json(newData);
   } catch (error) {
     next(new InternalServerError("Internal error"));
-    // response.status(500).json({ message: "" });
   }
 }
 
@@ -43,9 +37,7 @@ export async function getCategoryByName(
 ) {
   try {
     console.log("request:",request.params);
-    const foundCategory = await categoriesService.getCategoryByName(
-      request.params.name
-    );
+    const foundCategory = await Category.findById(request.params.name);
     response.status(201).json(foundCategory);
   } catch (error) {
     if (error instanceof NotFoundError) {
@@ -64,12 +56,9 @@ export async function deleteCategoryByName(
   next: NextFunction
 ) {
   try {
-    const deletedCategory = categoriesService.deleteCategoryByName(
-      request.params.name
-    );
+    const deletedCategory = await Category.findByIdAndDelete(request.params.name);
     response.status(200).json(deletedCategory);
   } catch (error) {
-    // handle error
     if (error instanceof NotFoundError) {
       response
         .status(404)
@@ -77,9 +66,33 @@ export async function deleteCategoryByName(
       return;
     }
     next(new InternalServerError());
-
-    // response.status(500).json({ message: "Internal error" });
-    // To Do: handler error
-    //  new InternalServerError();
   }
 }
+
+export async function updateCategory(
+  request: Request,
+  response: Response,
+  next: NextFunction
+) {
+  try {
+    const categoryId = request.params.name; 
+    const updatedCategory = await Category.findOneAndUpdate(
+      { _id: categoryId }, 
+      request.body,
+      { new: true } 
+    );
+
+    if (!updatedCategory) {
+      response.status(404).json({
+        message: `Cannot find category with ID: ${categoryId}`,
+      });
+      return;
+    }
+
+    response.status(200).json(updatedCategory);
+  } catch (error) {
+    next(new InternalServerError("Internal error"));
+  }
+}
+
+
