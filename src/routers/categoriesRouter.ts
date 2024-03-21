@@ -1,11 +1,12 @@
 import express from "express";
-import { getAllCategories, createCategory, getCategoryById } from "../resolvers/categories";
+import { getAllCategories, createCategory, getCategoryByName, deleteCategoryByName } from "../resolvers/categories";
 
 
 const router = express.Router();
 
 router.get("/", getAllCategories);
 router.post("/", createCategory);
-router.get("/:categoryId", getCategoryById);
+router.get("/:name", getCategoryByName);
+router.delete("/:name", deleteCategoryByName);
 
 export default router;

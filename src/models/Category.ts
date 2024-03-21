@@ -5,10 +5,8 @@ import { transformSchema } from "../utils/transform";
 export type CategoryDocument = Document;
 
 export const CategorySchema = new mongoose.Schema({
-  name: {
-    type: String,
-    require: true,
-    unique: true,
+  _id: {
+    type: String
   },
   createdAt: {
     type: Date,
