@@ -1,15 +1,20 @@
-export type Product = {
+export interface Product {
   id: string;
-  name: string;
-  category: string;
-  variant: string;
+  title: string;
   price: number;
-};
+  description: string;
+  category: Category;
+}
+
+interface Category {
+  createdAt: string;
+  productIds: string[];
+  id: string;
+}
 
 export interface Filters {
-  name?: string;
+  title?: string;
   category?: string;
-  variant?: string;
 }
 export interface Query extends Filters {
   offset?: number;
