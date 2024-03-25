@@ -12,9 +12,10 @@ export const CategorySchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
-  productIds: {
-    type: [String],
-  }
+  productIds: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Products"
+  }]
 });
 
 transformSchema(CategorySchema);

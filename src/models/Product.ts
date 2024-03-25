@@ -1,24 +1,35 @@
 import mongoose, { Schema } from "mongoose";
 import { transformSchema } from "../utils/transform";
+import { Product } from "../types/Product";
 
 const ProductSchema = new mongoose.Schema({
-    title: {
-      type: String,
-      require: true,
-    },
-    price: {
-      type: Number,
-      default: 0,
-    },
-    description: {
-      type: String
-    },
-    categoryId: {
-      type: Schema.Types.ObjectId,
-      ref: "Category",
-    },
+  title: {
+    type: String,
+    require: true,
+  },
+  price: {
+    type: Number,
+    default: 0,
+  },
+  description: {
+    type: String,
+    require: true,
+  },
+  categoryId: {
+    type: String,
+    ref: "Category",
+  },
+});
+
+ProductSchema.post("save", async function (doc) {
+  const Category = mongoose.model("Category");
+  await Category.findByIdAndUpdate(doc.categoryId, {
+    $addToSet: { productIds: doc._id },
   });
+});
 
-  transformSchema(ProductSchema);
+transformSchema(ProductSchema);
 
-export default mongoose.model("Products", ProductSchema);
+export type ProductDocument = Document & Product;
+
+export default mongoose.model<ProductDocument>("Products", ProductSchema);

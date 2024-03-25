@@ -1,88 +1,83 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+
 import { Filters, Product, Query } from "../types/Product";
-import Products from "../models/Product";
+import Products, { ProductDocument } from "../models/Product";
+import mongoose from "mongoose";
 
-let filters: Filters;
-function filterProds(filters: Filters, _products: Product[]): Product[] {
-    for (const key in filters) {
-      const value = filters[key as keyof Filters]?.toLowerCase();
-      if (value) {
-        _products = _products.filter((product) =>
-          product[key as keyof Filters]?.includes(value)
-        );
-      }
-    }
-    return _products;
-  }
+// testing function
+export async function getAllProducts(request: Request, response: Response) {
+  const count = await Products.estimatedDocumentCount();
+  console.log("Length:", count);
+  const productList = await Products.find().populate("categoryId");
+  console.log(productList);
+  response.status(200).json({ products: productList });
+}
 
-  // export async function getAllProducts(request: Request, response: Response) {
-  //   // query
-  //   // const nameQuery = request.query.name as string;
-  //   // console.log(request.query, "query");
-  //   // const priceQuery = request.query.price as string;
-  //   const limit = Number(request.query.limit);
-  //   const offset = Number(request.query.offset);
-  //   const searchQuery = request.query.searchQuery as string;
-  //   const minPrice = Number(request.query.minPrice);
-  //   const maxPrice = Number(request.query.maxPrice);
-  //   // task 1: combine query
-  //   const productList = await productServices.getAllProducts(
-  //     limit,
-  //     offset,
-  //     searchQuery,
-  //     minPrice,
-  //     maxPrice
-  //   );
-  //   // way1
-  //   const count = productList.length;
-  
-  //   response.status(200).json({ totalCount: count, products: productList });
-  // }
-  
-  // export async function createProduct(request: Request, response: Response) {
-  //   const data = new Product(request.body);
-  //   const newProduct = await productServices.createProduct(data);
-  //   response.status(201).json(newProduct);
-  // }
-  
-  // export function deleteProduct(request: Request, response: Response) {
-  //   const productId = request.params.productId;
-  //   products = products.filter((item) => item.id !== productId);
-  //   response.sendStatus(204);
-  // }
+export async function createProduct(request: Request, response: Response) {
+  const data = new Products(request.body);
+  const newProduct = await data.save();
+  response.status(201).json(newProduct);
+}
 
-export function productsGetter(request: Request, response: Response){
-    const prodLen = products.length;
-    const {
-      offset = 0,
-      limit = prodLen,
-      name,
-      category,
-      variant,
-      pid,
-    }: Query = request.query;
-  
-    filters = {
-      ...(name && { name }),
-      ...(category && { category }),
-      ...(variant && { variant }),
-    };
-  
-    if (pid) {
-      const product = products.find((p) => p.id === pid);
-      if (!product) {
-        response.status(404).json({ error: "Product not found" });
-      } else {
-        response.status(200).json(product);
-      }
-    } else {
-      let _products = filterProds(filters, products);
-      const end = Math.min(offset + limit, prodLen);
-      _products = _products.slice(offset, end);
-      response.status(200).json(_products);
-    }
-    response.end();
-  };
+// let filters: Filters;
+// async function filterProds(filters: Filters): Promise<Product[]> {
+//   let _products: ProductDocument[] = [];
+//   for (const key in filters) {
+//     const value = filters[key as keyof Filters]?.toLowerCase();
+//     if (value) {
+//       if (_products.length > 0) {
+//         _products = await Products.find().populate("categoryId").lean().exec();
+//       } else {
+//         _products = _products.filter((product) =>
+//           product[key as keyof Filters]?.includes(value)
+//         );
+//       }
+//     }
+//   }
+//   return _products;
+// }
+
+// export async function productsGetter(
+//   request: Request,
+//   response: Response,
+//   next: NextFunction
+// ) {
+//   const prodLen = await Products.estimatedDocumentCount();
+//   const {
+//     offset = 0,
+//     limit = prodLen,
+//     title,
+//     category,
+//     pid,
+//   }: Query = request.query;
+//   filters = {
+//     ...(title && { title }),
+//     ...(category && { category }),
+//   };
+//   if (pid) {
+//     const product: Product = (await Products.findById(pid).populate(
+//       "categoryId"
+//     )) as Product;
+//   } else {
+//     let _products = filterProds(filters);
+//     const end = Math.min(offset + limit, prodLen);
+//     _products = _products.slice(offset, end);
+//     response.status(200).json(_products);
+//   }
+//   response.end();
+// }
+
+// export async function createProduct(request: Request, response: Response) {
+//   const data = new Product(request.body);
+//   const newProduct = await productServices.createProduct(data);
+//   response.status(201).json(newProduct);
+// }
+
+// export function deleteProduct(request: Request, response: Response) {
+//   const productId = request.params.productId;
+//   products = products.filter((item) => item.id !== productId);
+//   response.sendStatus(204);
+// }
 
 // export function productsGetter(request: Request, response: Response){
 //   Products.find({}).then(products => {response.json(products)});
