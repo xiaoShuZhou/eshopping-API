@@ -2,7 +2,7 @@ import express from "express";
 
 // import products from '../data/products.json';
 import { Filters, Product, Query } from "../types/Product";
-import { createProduct, getAllProducts } from "../resolvers/products";
+import { createProduct, getAllProducts } from "../controllers/products";
 
 const router = express.Router();
 // let filters: Filters;
