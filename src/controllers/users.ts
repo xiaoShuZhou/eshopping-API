@@ -3,10 +3,17 @@ import mongoose from "mongoose";
 import User from "../models/User";
 import { InternalServerError } from "../errors/ApiError";
 import usersService from "../services/userService";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export async function createUser(request: Request, response: Response, next: NextFunction) {
   try {
-    const newData = new User(request.body);
+    const { password } = request.body;
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const userData = request.body;
+    userData.password = hashedPassword;
+    const newData = new User(userData);
     const newUser = await usersService.createUser(newData);
     response.status(201).json(newUser);
   } catch (error) {
@@ -62,3 +69,28 @@ export async function deleteUser(request: Request, response: Response, next: Nex
   }
 }
 
+export async function login(request: Request, response: Response, next: NextFunction) {
+  try {
+    const { email, password } = request.body;
+    const user = await usersService.findUserByEmail(email);
+    // Check if user exists
+    if (!user) {
+      response.status(404).json({ message: "User not found" });
+      return;
+    }
+    // Check if password is correct by comparing the hashed password
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    if (!isPasswordCorrect) {
+      response.status(403).json({ message: "Incorrect password" });
+      return;
+    }
+    // Create and return a JWT token. then store the token in local storage in frontend
+    const JWT_SECRET = process.env.JWT_SECRET as string;
+    const token = jwt.sign({ email: user.email, id: user._id }, JWT_SECRET, { expiresIn: "3h" });
+    response.status(200).json({ user, token });
+
+  } catch (error) {
+    next(new InternalServerError());
+  }
+}
+  

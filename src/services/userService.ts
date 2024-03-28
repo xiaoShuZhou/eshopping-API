@@ -43,4 +43,12 @@ const findUserByID = async (userId: string): Promise<UserDocument | null> => {
   }
 };
 
-export default { getAllUsers, createUser, updateUser, deleteUser, findUserByID };
+const findUserByEmail = async (email: string): Promise<UserDocument | null> => {
+  try {
+    return await User.findOne({email});
+  } catch (error) {
+    throw new NotFoundError("User does not exist");
+  }
+}
+
+export default { getAllUsers, createUser, updateUser, deleteUser, findUserByID, findUserByEmail};
