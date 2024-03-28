@@ -7,6 +7,7 @@ import { config } from "./utils/config";
 import productsRouter from "./routers/productsRouter";
 import categoriesRouter from "./routers/categoriesRouter";
 import userRouter from "./routers/userRouter";
+import orderRouter from "./routers/orderRouter";
 import {
   errorHandler,
   requestLogger,
@@ -37,6 +38,8 @@ app.use(requestLogger);
 app.use("/api/v1/products", productsRouter);
 app.use("/api/v1/categories", categoriesRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/orders", orderRouter);
+
 
 app.use(unknownEndpoint);
 app.use(errorHandler);
