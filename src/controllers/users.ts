@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 import User from "../models/User";
 import { InternalServerError } from "../errors/ApiError";
-import usersService from "../services/users";
+import usersService from "../services/userService";
 
 export async function createUser(request: Request, response: Response, next: NextFunction) {
   try {
