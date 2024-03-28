@@ -21,12 +21,12 @@ const ProductSchema = new mongoose.Schema({
   },
 });
 
-ProductSchema.post("save", async function (doc) {
-  const Category = mongoose.model("Category");
-  await Category.findByIdAndUpdate(doc.categoryId, {
-    $addToSet: { productIds: doc._id },
-  });
-});
+// ProductSchema.post("save", async function (doc) {
+//   const Category = mongoose.model("Category");
+//   await Category.findByIdAndUpdate(doc.categoryId, {
+//     $addToSet: { productIds: doc._id },
+//   });
+// });
 
 transformSchema(ProductSchema);
 

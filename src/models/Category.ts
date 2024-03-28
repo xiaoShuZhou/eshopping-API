@@ -11,11 +11,7 @@ export const CategorySchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now(),
-  },
-  productIds: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Products"
-  }]
+  }
 });
 
 transformSchema(CategorySchema);
