@@ -14,7 +14,6 @@ import {
 import responseHandler from "./middlewares/responseHandler";
 import passport from "passport";
 import { jwtStrategy } from "./config/passport";
-import adminCheck from "./middlewares/adminCheck";
 
 mongoose.set("strictQuery", false);
 const app = express();
@@ -35,7 +34,6 @@ if (config.MONGODB_URI) {
 app.use(cors());
 app.use(express.static("dist"));
 app.use(express.json());
-app.use(adminCheck);
 app.use(requestLogger);
 app.use(passport.initialize());
 passport.use(jwtStrategy);
