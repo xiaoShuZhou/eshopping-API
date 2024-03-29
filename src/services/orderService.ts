@@ -12,4 +12,13 @@ const updateOrder = async (orderId: string, orderData: Partial<OrderDocument>): 
     return await Order.findByIdAndUpdate(orderId, orderData, { new: true }).exec();
   }
 
-export default { createOrder, deleteOrder, updateOrder};
+const getAllOrders = async (): Promise<OrderDocument[]> => {
+    return await Order.find().exec();
+  }
+
+const findOrderById = async (orderId: string): Promise<OrderDocument | null> => {
+    return await Order.findById(orderId).exec();
+  }
+
+
+export default { createOrder, deleteOrder, updateOrder, getAllOrders, findOrderById};
