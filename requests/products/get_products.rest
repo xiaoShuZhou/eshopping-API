@@ -1,2 +1,22 @@
 GET http://localhost:3001/api/v1/products
 Content-Type: application/json
+
+###
+
+GET http://localhost:3001/api/v1/products?title=test
+Content-Type: application/json
+
+
+
+###
+
+GET http://localhost:3001/api/v1/products?pid=6606af73515e82ab88828079
+Content-Type: application/json
+
+###
+
+GET http://localhost:3001/api/v1/products?categoryId=shoes
+Content-Type: application/json
+
+
+

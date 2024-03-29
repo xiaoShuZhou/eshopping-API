@@ -24,12 +24,12 @@ export async function productsGetter(
       offset = 0,
       limit = await Products.estimatedDocumentCount(),
       title,
-      category,
+      categoryId,
       pid,
     }: Query = request.query;
     let filters: Filters = {};
     if (title) filters.title = title;
-    if (category) filters.category = category;
+    if (categoryId) filters.categoryId = categoryId;
     if (pid) {
       const product: Product = (await Products.findById(pid).populate("categoryId").lean().exec()) as Product;
       if (!product) {
@@ -56,5 +56,19 @@ export async function deleteProduct(request: Request, response: Response, next: 
     next(new NoContentResponse("Product deleted successfully"));
   } catch (error) {
     next(new InternalServerError("Failed to delete product"));
+  }
+}
+
+export async function updateProduct(request: Request, response: Response, next: NextFunction) {
+  try {
+    const productId = request.params.productId;
+    const updatedProduct = await Products.findByIdAndUpdate(productId, request.body, { new: true });
+    if (!updatedProduct) {
+      next(new NotFoundError("Product not found"));
+      return;
+    }
+    next(new SuccessResponse<Product>("Product updated successfully", updatedProduct));
+  } catch (error) {
+    next(new InternalServerError("Failed to update product"));
   }
 }

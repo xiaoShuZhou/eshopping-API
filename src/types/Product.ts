@@ -13,7 +13,7 @@ export interface Category {
 
 export interface Filters {
   title?: string;
-  category?: string;
+  categoryId?: string;
 }
 export interface Query extends Filters {
   offset?: number;
