@@ -9,6 +9,7 @@ import {
   NotFoundError,
 } from '../errors/ApiError';
 
+
 import Order, { OrderDocument } from '../models/Order';
 import orderService from '../services/orderService';
 
@@ -23,3 +24,15 @@ export async function createOrder(request: Request, response: Response, next: Ne
     }
 }
 
+export async function deleteOrder(request: Request, response: Response, next: NextFunction) {
+    try {
+        const order = await orderService.deleteOrder(request.params.orderId);
+        if (!order) {
+            response.status(404).json({ message: 'Order not found' });
+            return;
+        }
+        response.status(200).json({ message: 'Order deleted successfully' });
+    } catch (error) {
+        next(new InternalServerError());
+    }
+}

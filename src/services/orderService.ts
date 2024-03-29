@@ -4,4 +4,8 @@ const createOrder = async (order: OrderDocument): Promise<OrderDocument> => {
     return await order.save();
   }
 
-export default { createOrder };
+const deleteOrder = async (orderId: string): Promise<OrderDocument | null> => {
+    return await Order.findByIdAndDelete(orderId).exec();
+  }
+
+export default { createOrder, deleteOrder};
