@@ -9,10 +9,9 @@ import categoriesRouter from "./routers/categoriesRouter";
 import userRouter from "./routers/userRouter";
 import orderRouter from "./routers/orderRouter";
 import {
-  errorHandler,
   requestLogger,
-  unknownEndpoint,
-} from "./utils/middleware";
+} from "./middlewares/requestLogger";
+import responseHandler from "./middlewares/responseHandler";
 
 mongoose.set("strictQuery", false);
 const app = express();
@@ -40,8 +39,6 @@ app.use("/api/v1/categories", categoriesRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/orders", orderRouter);
 
-
-app.use(unknownEndpoint);
-app.use(errorHandler);
+app.use(responseHandler);
 
 export default app;

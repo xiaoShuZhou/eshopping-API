@@ -1,8 +1,7 @@
 import mongoose, { Document } from "mongoose";
 
 import { transformSchema } from "../utils/transform";
-
-export type CategoryDocument = Document;
+import { Category } from "../types/Product";
 
 export const CategorySchema = new mongoose.Schema({
   _id: {
@@ -16,4 +15,6 @@ export const CategorySchema = new mongoose.Schema({
 
 transformSchema(CategorySchema);
 
-export default mongoose.model<CategoryDocument>("Category", CategorySchema);
+export type CategoryDocument = Document & Category;
+
+export default mongoose.model<CategoryDocument>("Categories", CategorySchema);
