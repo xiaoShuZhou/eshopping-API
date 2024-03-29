@@ -12,6 +12,8 @@ import {
   requestLogger,
 } from "./middlewares/requestLogger";
 import responseHandler from "./middlewares/responseHandler";
+import passport from "passport";
+import { jwtStrategy } from "./config/passport";
 
 mongoose.set("strictQuery", false);
 const app = express();
@@ -33,6 +35,8 @@ app.use(cors());
 app.use(express.static("dist"));
 app.use(express.json());
 app.use(requestLogger);
+app.use(passport.initialize());
+passport.use(jwtStrategy);
 
 app.use("/api/v1/products", productsRouter);
 app.use("/api/v1/categories", categoriesRouter);

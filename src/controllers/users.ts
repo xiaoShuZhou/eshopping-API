@@ -1,10 +1,12 @@
 import express, { NextFunction, Request, Response } from "express";
-import mongoose from "mongoose";
 import User from "../models/User";
 import { InternalServerError } from "../errors/ApiError";
 import usersService from "../services/userService";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config({ path: ".env" });
 
 export async function createUser(request: Request, response: Response, next: NextFunction) {
   try {
@@ -86,6 +88,7 @@ export async function login(request: Request, response: Response, next: NextFunc
     }
     // Create and return a JWT token. then store the token in local storage in frontend
     const JWT_SECRET = process.env.JWT_SECRET as string;
+    console.log(JWT_SECRET, "jwt");
     const token = jwt.sign({ email: user.email, id: user._id }, JWT_SECRET, { expiresIn: "3h" });
     response.status(200).json({ user, token });
 

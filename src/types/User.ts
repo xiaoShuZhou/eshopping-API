@@ -6,3 +6,8 @@ export type User = {
   role: string;
   avatar: string;
 };
+
+export type Payload = {
+  email: string;
+  _id: string;
+};
