@@ -2,8 +2,6 @@ import mongoose, { Document } from 'mongoose';
 
 import { User } from '../types/User';
 
-export type UserDocument = Document & User;
-
 const UserSchema = new mongoose.Schema({
   firstName: {
     type: String,
@@ -36,5 +34,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
   }
 });
+
+export type UserDocument = Document & User;
 
 export default mongoose.model<UserDocument>('User', UserSchema);
