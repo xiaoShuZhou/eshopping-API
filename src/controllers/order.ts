@@ -36,3 +36,16 @@ export async function deleteOrder(request: Request, response: Response, next: Ne
         next(new InternalServerError());
     }
 }
+
+export async function updateOrder(request: Request, response: Response, next: NextFunction) {
+    try {
+        const order = await orderService.updateOrder(request.params.orderId, request.body);
+        if (!order) {
+            response.status(404).json({ message: 'Order not found' });
+            return;
+        }
+        response.status(200).json(order);
+    } catch (error) {
+        next(new InternalServerError());
+    }
+}

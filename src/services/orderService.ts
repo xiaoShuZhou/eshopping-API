@@ -8,4 +8,8 @@ const deleteOrder = async (orderId: string): Promise<OrderDocument | null> => {
     return await Order.findByIdAndDelete(orderId).exec();
   }
 
-export default { createOrder, deleteOrder};
+const updateOrder = async (orderId: string, orderData: Partial<OrderDocument>): Promise<OrderDocument | null> => {
+    return await Order.findByIdAndUpdate(orderId, orderData, { new: true }).exec();
+  }
+
+export default { createOrder, deleteOrder, updateOrder};
