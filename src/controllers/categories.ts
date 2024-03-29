@@ -1,98 +1,69 @@
 import express, { NextFunction, Request, Response } from "express";
-
+import Categories from "../models/Category";
 import { InternalServerError, NotFoundError } from "../errors/ApiError";
-import Category from "../models/Category";
+import { CreatedResponse, NoContentResponse, SuccessResponse } from "../responses/apiResponse";
+import { Category } from "../types/Product";
 
-export async function getAllCategories(
-  _: Request,
-  response: Response,
-  next: NextFunction
-) {
+export async function getAllCategories(_: Request, response: Response, next: NextFunction) {
   try {
-    const categories = await Category.find();
-    response.status(200).json(categories);
+    const categories = await Categories.find();
+    next(new SuccessResponse<Category[]>("Categories retrieved successfully", categories));
   } catch (error) {
     next(new InternalServerError("Internal error"));
   }
 }
 
-export async function createCategory(
-  request: Request,
-  response: Response,
-  next: NextFunction
-) {
+export async function createCategory(request: Request, response: Response, next: NextFunction) {
   try {
-    let newData = new Category(request.body);
-    newData = await newData.save()
-    response.status(201).json(newData);
+    let newData = new Categories(request.body);
+    newData = await newData.save();
+    next(new CreatedResponse<Category>("Category created successfully", newData));
   } catch (error) {
     next(new InternalServerError("Internal error"));
   }
 }
 
-export async function getCategoryByName(
-  request: Request,
-  response: Response,
-  next: NextFunction
-) {
+export async function getCategoryByName(request: Request, response: Response, next: NextFunction) {
   try {
-    console.log("request:",request.params);
-    const foundCategory = await Category.findById(request.params.name);
-    response.status(201).json(foundCategory);
-  } catch (error) {
-    if (error instanceof NotFoundError) {
-      response.status(404).json({
-        message: `Cant find category ${request.params.name}`,
-      });
+    console.log("request:", request.params);
+    const foundCategory = await Categories.findById(request.params.name);
+    if (!foundCategory) {
+      next(new NotFoundError(`Cannot find category ${request.params.name}`));
       return;
     }
-    next(new InternalServerError());
+    next(new SuccessResponse<Category>("Category found", foundCategory));
+  } catch (error) {
+    next(new InternalServerError("Internal error"));
   }
 }
 
-export async function deleteCategoryByName(
-  request: Request,
-  response: Response,
-  next: NextFunction
-) {
+export async function deleteCategoryByName(request: Request, response: Response, next: NextFunction) {
   try {
-    const deletedCategory = await Category.findByIdAndDelete(request.params.name);
-    response.status(200).json(deletedCategory);
-  } catch (error) {
-    if (error instanceof NotFoundError) {
-      response
-        .status(404)
-        .json({ message: `Cant find category: ${request.params.name}` });
+    const deletedCategory = await Categories.findByIdAndDelete(request.params.name);
+    if (!deletedCategory) {
+      next(new NotFoundError(`Cannot find category ${request.params.name}`));
       return;
     }
-    next(new InternalServerError());
+    next(new NoContentResponse("Category deleted successfully"));
+  } catch (error) {
+    next(new InternalServerError("Internal error"));
   }
 }
 
-export async function updateCategory(
-  request: Request,
-  response: Response,
-  next: NextFunction
-) {
+export async function updateCategory(request: Request, response: Response, next: NextFunction) {
   try {
-    const categoryId = request.params.name; 
-    const updatedCategory = await Category.findOneAndUpdate(
-      { _id: categoryId }, 
+    const categoryId = request.params.name;
+    const updatedCategory = await Categories.findOneAndUpdate(
+      { _id: categoryId },
       request.body,
-      { new: true } 
+      { new: true }
     );
-
     if (!updatedCategory) {
-      response.status(404).json({
-        message: `Cannot find category with ID: ${categoryId}`,
-      });
+      next(new NotFoundError(`Cannot find category with ID: ${categoryId}`));
       return;
     }
-
-    response.status(200).json(updatedCategory);
+    next(new SuccessResponse<Category>("Category updated successfully", updatedCategory));
   } catch (error) {
     next(new InternalServerError("Internal error"));
   }
 }
-
-

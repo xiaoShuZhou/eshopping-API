@@ -5,5 +5,5 @@ Content-Type: application/json
 "title": "test",
 "price": 10,
 "description": "something",
-"categoryId": "clothes"
+"categoryId": "shoes"
 }

@@ -17,7 +17,7 @@ const ProductSchema = new mongoose.Schema({
   },
   categoryId: {
     type: String,
-    ref: "Category",
+    ref: "Categories",
   },
 });
 
