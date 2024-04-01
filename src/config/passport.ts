@@ -5,11 +5,11 @@ import { Payload, User } from "../types/User";
 import dotenv from "dotenv";
 
 import userService from "../services/userService";
-import { UserDocument } from "../models/User";
+import { logger } from "../utils/logger";
 
 dotenv.config({ path: ".env" });
 const JWT_SECRET = process.env.JWT_SECRET as string;
-console.log(JWT_SECRET, "jwt");
+logger.info(JWT_SECRET, "jwt");
 
 export const jwtStrategy = new JwtStrategy(
   {
@@ -18,7 +18,7 @@ export const jwtStrategy = new JwtStrategy(
   },
   async (payload: Payload, done: any) => {
     try {
-      console.log(payload, "payload");
+      logger.info(JSON.stringify(payload), "payload");
       const userEmail = payload.email;
       const foundUser:User = await userService.findUserByEmail(userEmail) as User;
       done(null, foundUser); 
