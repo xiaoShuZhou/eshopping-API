@@ -1,11 +1,13 @@
 import express from "express";
-import {createOrderItem, deleteOrderItem} from "../controllers/orderItem";
+import {createOrderItem, updateOrderItemQuantity,deleteOrderItem} from "../controllers/orderItem";
 
 
 const router = express.Router();
 
 router.post("/", createOrderItem);
-router.put("/", createOrderItem);
+
+router.put("/:orderItemId", updateOrderItemQuantity);
+
 router.delete("/:orderItemId", deleteOrderItem);
 
 export default router;
