@@ -7,8 +7,7 @@ import adminCheck from "../middlewares/adminCheck";
 const router = express.Router();
 
 router.get("/", productsGetter);
-// router.post("/", adminCheck, createProduct);
-router.post("/", createProduct);
+router.post("/", adminCheck, createProduct);
 router.delete("/:productId", adminCheck, deleteProduct);
 
 export default router;
