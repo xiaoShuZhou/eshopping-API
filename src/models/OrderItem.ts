@@ -5,7 +5,10 @@ import Product, { ProductDocument } from './Product';
 
 
 export const OrderItemSchema = new Schema({
-  product: Product.schema,
+  product: {
+    type: Schema.Types.ObjectId,
+    ref: 'Product'
+  },
   quantity: {
     type: Number,
     default: 1

@@ -11,7 +11,8 @@ export const OrderSchema = new Schema({
     ref: 'User'
   },
   items: [{
-    type: OrderItemSchema 
+    type: Schema.Types.ObjectId,
+    ref: 'OrderItem'
   }],
   createdAt: {
     type: Date,
