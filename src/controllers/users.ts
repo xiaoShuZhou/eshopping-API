@@ -71,6 +71,43 @@ export async function deleteUser(request: Request, response: Response, next: Nex
   }
 }
 
+export async function forgetPassword(request: Request, response: Response, next: NextFunction) {
+  try {
+    const { email } = request.body;
+    const user = await usersService.findUserByEmail(email);
+    if (!user) {
+      response.status(404).json({ message: "User not found,please sign up" });
+      return;
+    }
+    response.status(200).json(user.password);
+  } catch (error) {
+    next(new InternalServerError());
+  }
+}
+
+
+export async function changePassword(request: Request, response: Response, next: NextFunction) {
+  try {
+    const { email, oldPassword, newPassword } = request.body;
+    const user = await usersService.findUserByEmail(email);
+    if (!user) {
+      response.status(404).json({ message: "User not found" });
+      return;
+    }
+    const isPasswordCorrect = await bcrypt.compare(oldPassword, user.password);
+    if (!isPasswordCorrect) {
+      response.status(403).json({ message: "Incorrect password" });
+      return;
+    }
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+    const updatedUser = await usersService.updateUser(user._id, { password: hashedPassword });
+    response.status(200).json(updatedUser);
+  } catch (error) {
+    next(new InternalServerError());
+  }
+}
+
 export async function login(request: Request, response: Response, next: NextFunction) {
   try {
     const { email, password } = request.body;
