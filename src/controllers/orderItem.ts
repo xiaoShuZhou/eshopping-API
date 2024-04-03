@@ -21,7 +21,7 @@ export async function createOrderItem(request: Request, response: Response, next
             product: productId,
             quantity
         });
-        const orderItem = await newOrderItem.save();
+        const orderItem = await orderItemService.createOrderItem(newOrderItem);
 
         // update the order with the new order item
         await orderServive.updateOrder(orderId, { $push: { items: orderItem._id } } as any );
@@ -38,7 +38,7 @@ export async function updateOrderItemQuantity(request: Request, response: Respon
         const { orderItemId, quantity } = request.body;
 
         // find the order item
-        const orderItem = await OrderItem.findById(orderItemId);
+        const orderItem = await orderItemService.getOneOrderItem(orderItemId);
         if (!orderItem) {
             return response.status(404).json({ message: 'OrderItem not found' });
         }
@@ -52,6 +52,27 @@ export async function updateOrderItemQuantity(request: Request, response: Respon
     }
 }
 
+export async function getAllOrderItems(request: Request, response: Response, next: NextFunction) {
+    try {
+        const orderItems = await orderItemService.getAllOrderItems();
+        response.status(200).json(orderItems);
+    } catch (error) {
+        next(new InternalServerError());
+    }
+}
+
+export async function getOrderItem(request: Request, response: Response, next: NextFunction) {
+    try {
+        const orderItem = await orderItemService.getOneOrderItem(request.params.orderItemId);
+        if (!orderItem) {
+            response.status(404).json({ message: 'OrderItem not found' });
+            return;
+        }
+        response.status(200).json(orderItem);
+    } catch (error) {
+        next(new InternalServerError());
+    }
+}
 
 export async function deleteOrderItem(request: Request, response: Response, next: NextFunction) {
     try {
