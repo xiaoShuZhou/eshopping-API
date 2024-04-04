@@ -7,11 +7,8 @@ const router = express.Router();
 
 router.get("/", getProductsHandler);
 
-// router.post("/", adminCheck, createProductHandler);
-// router.delete("/:productId", adminCheck, deleteProductHandler);
-
-router.post("/", createProductHandler);
-router.delete("/:productId", deleteProductHandler);
-router.put("/:productId", updateProductHandler);
+router.post("/", adminCheck, createProductHandler);
+router.delete("/:productId", adminCheck, deleteProductHandler);
+router.put("/:productId", adminCheck, updateProductHandler);
 
 export default router;
