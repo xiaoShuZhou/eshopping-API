@@ -54,7 +54,7 @@ export async function deleteCategoryByNameHandler(request: Request, response: Re
 export async function updateCategoryHandler(request: Request, response: Response, next: NextFunction) {
   try {
     const categoryId = request.params.name;
-    const updatedCategory = await updateCategory(categoryId, request.body)
+    const updatedCategory = await updateCategory(categoryId, request.body);
     if (!updatedCategory) {
       next(new NotFoundError(`Cannot find category with ID: ${categoryId}`));
       return;

@@ -8,13 +8,9 @@ const router = express.Router();
 router.get("/", getCategoriesHandler);
 router.get("/:name", getCategoryByNameHandler);
 
-// router.post("/", adminCheck, createCategoryHandler);
-// router.delete("/:name", adminCheck, deleteCategoryByNameHandler);
-// router.put("/:name", adminCheck, updateCategoryHandler);
-
-router.post("/", createCategoryHandler);
-router.delete("/:name", deleteCategoryByNameHandler);
-router.put("/:name", updateCategoryHandler);
+router.post("/", adminCheck, createCategoryHandler);
+router.delete("/:name", adminCheck, deleteCategoryByNameHandler);
+router.put("/:name", adminCheck, updateCategoryHandler);
 
 export default router;
 
