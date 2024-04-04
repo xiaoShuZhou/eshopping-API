@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get("/", getProductsHandler);
 
-router.post("/", createProductHandler);
+router.post("/", adminCheck, createProductHandler);
 router.delete("/:productId", adminCheck, deleteProductHandler);
 router.put("/:productId", adminCheck, updateProductHandler);
 
