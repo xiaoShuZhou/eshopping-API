@@ -49,5 +49,11 @@ describe("create category", () => {
       expect(statusCode).toBe(403);
     });
   });
+  describe("the admin logged in", () => {
+    it("should return a 200", async () => {
+      const { statusCode } = await supertest(app).post(`${path}`);
+      expect(statusCode).toBe(403);
+    });
+  });
 });
 

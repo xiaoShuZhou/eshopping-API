@@ -1,8 +1,8 @@
-import { Product } from "./Product";
+import { ProductDocument } from "./Product";
 import { User } from "./User"
 
 export type OrderItem = {
-    product: Product;
+    product: ProductDocument;
     quantity: number;
   }
 
