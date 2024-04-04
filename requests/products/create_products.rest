@@ -2,7 +2,7 @@ POST http://localhost:3001/api/v1/products
 Content-Type: application/json
 
 {
-"title": "test",
+"title": "test2",
 "price": 10,
 "description": "something",
 "categoryId": "shoes"

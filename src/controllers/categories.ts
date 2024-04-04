@@ -4,9 +4,10 @@ import { InternalServerError, NotFoundError } from "../errors/ApiError";
 import { CreatedResponse, NoContentResponse, SuccessResponse } from "../responses/apiResponse";
 import { Category } from "../types/Product";
 import { createCategory, getAllCategories, getCategoryByName, updateCategory } from "../services/category.service";
+import { CategoryInput } from "../schema/category.schema";
 
 
-export async function createCategoryHandler(request: Request, response: Response, next: NextFunction) {
+export async function createCategoryHandler(request: Request<{}, {}, CategoryInput["body"]>, _: Response, next: NextFunction) {
   try {
     let newData = new Categories(request.body);
     const _newData = await createCategory(newData);
@@ -16,7 +17,7 @@ export async function createCategoryHandler(request: Request, response: Response
   }
 }
 
-export async function getCategoriesHandler(_: Request, response: Response, next: NextFunction) {
+export async function getCategoriesHandler(_:Request, __:Response, next: NextFunction) {
   try {
     const categories = await getAllCategories();
     next(new SuccessResponse<Category[]>("Categories retrieved successfully", categories));
@@ -25,7 +26,7 @@ export async function getCategoriesHandler(_: Request, response: Response, next:
   }
 }
 
-export async function getCategoryByNameHandler(request: Request, response: Response, next: NextFunction) {
+export async function getCategoryByNameHandler(request: Request<CategoryInput["params"]>, _:Response, next: NextFunction) {
   try {
     const foundCategory = await getCategoryByName(request.params.name);
     if (!foundCategory) {
@@ -38,7 +39,7 @@ export async function getCategoryByNameHandler(request: Request, response: Respo
   }
 }
 
-export async function deleteCategoryByNameHandler(request: Request, response: Response, next: NextFunction) {
+export async function deleteCategoryByNameHandler(request: Request<CategoryInput["params"]>, _:Response, next: NextFunction) {
   try {
     const deletedCategory = await Categories.findByIdAndDelete(request.params.name);
     if (!deletedCategory) {
@@ -51,7 +52,7 @@ export async function deleteCategoryByNameHandler(request: Request, response: Re
   }
 }
 
-export async function updateCategoryHandler(request: Request, response: Response, next: NextFunction) {
+export async function updateCategoryHandler(request: Request<CategoryInput["params"]>, _:Response, next: NextFunction) {
   try {
     const categoryId = request.params.name;
     const updatedCategory = await updateCategory(categoryId, request.body);
@@ -61,7 +62,6 @@ export async function updateCategoryHandler(request: Request, response: Response
     }
     next(new SuccessResponse<Category>("Category updated successfully", updatedCategory));
   } catch (error) {
-    console.log(error);
     next(new InternalServerError("Internal error"));
   }
 }
