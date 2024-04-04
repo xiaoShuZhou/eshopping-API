@@ -1,4 +1,7 @@
-export interface Product {
+import mongoose from "mongoose";
+import { Document } from "mongoose";
+
+export interface ProductDocument extends mongoose.Document{
   id: string;
   title: string;
   price: number;
@@ -11,12 +14,14 @@ export interface Category {
   id: string;
 }
 
+export type CategoryDocument = Document & Category;
+
 export interface Filters {
   title?: string;
   categoryId?: string;
 }
 export interface Query extends Filters {
-  offset?: number;
+  skip?: number;
   limit?: number;
   pid?: string;
 }
