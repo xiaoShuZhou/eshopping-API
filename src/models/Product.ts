@@ -1,11 +1,11 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Document } from "mongoose";
 import { transformSchema } from "../utils/transform";
-import { Product } from "../types/Product";
+import { ProductDocument } from "../types/Product";
 
 const ProductSchema = new mongoose.Schema({
   title: {
     type: String,
-    require: true,
+    required: true,
   },
   price: {
     type: Number,
@@ -13,7 +13,7 @@ const ProductSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    require: true,
+    required: true,
   },
   categoryId: {
     type: String,
@@ -21,15 +21,6 @@ const ProductSchema = new mongoose.Schema({
   },
 });
 
-// ProductSchema.post("save", async function (doc) {
-//   const Category = mongoose.model("Category");
-//   await Category.findByIdAndUpdate(doc.categoryId, {
-//     $addToSet: { productIds: doc._id },
-//   });
-// });
-
 transformSchema(ProductSchema);
-
-export type ProductDocument = Document & Product;
 
 export default mongoose.model<ProductDocument>("Products", ProductSchema);

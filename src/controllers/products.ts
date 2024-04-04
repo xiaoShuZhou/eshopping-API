@@ -1,28 +1,29 @@
 import { NextFunction, Request, Response } from "express";
-import { Filters, Product, Query } from "../types/Product";
-import Products, { ProductDocument } from "../models/Product";
+import { Filters, ProductDocument, Query } from "../types/Product";
+import Products from "../models/Product";
 import { NotFoundError, InternalServerError } from "../errors/ApiError";
 import { CreatedResponse, SuccessResponse, NoContentResponse } from "../responses/apiResponse";
+import { createProduct, deleteProductById, getProductById, getProducts, updateProduct } from "../services/product.service";
 
-export async function createProduct(request: Request, response: Response, next: NextFunction) {
+export async function createProductHandler(request: Request, response: Response, next: NextFunction) {
   try {
     const data = new Products(request.body);
-    const newProduct = await data.save();
-    next(new CreatedResponse<Product>("Product created successfully", newProduct));
+    const newProduct = await createProduct(data);
+    next(new CreatedResponse<ProductDocument>("Product created successfully", newProduct));
   } catch (error) {
     next(new InternalServerError("Failed to create product"));
   }
 }
 
-export async function productsGetter(
+export async function getProductsHandler(
   request: Request,
   response: Response,
   next: NextFunction
 ) {
   try {
     const {
-      offset = 0,
-      limit = await Products.estimatedDocumentCount(),
+      limit,
+      skip,
       title,
       categoryId,
       pid,
@@ -31,24 +32,29 @@ export async function productsGetter(
     if (title) filters.title = title;
     if (categoryId) filters.categoryId = categoryId;
     if (pid) {
-      const product: Product = (await Products.findById(pid).populate("categoryId").lean().exec()) as Product;
+      const product = await getProductById(pid);
       if (!product) {
         next(new NotFoundError("Product not found"));
         return;
       }
-      next(new SuccessResponse<Product>("Product found", product));
+      next(new SuccessResponse<ProductDocument>("Product found", product));
     } else {
-      const _products: Product[] = await Products.find(filters).limit(limit).skip(offset).populate('categoryId').lean().exec();
-      next(new SuccessResponse<Product[]>("Products retrieved successfully", _products));
+      const _products: ProductDocument[] = await getProducts(filters);
+      if (_products.length>0){
+        next(new SuccessResponse<ProductDocument[]>("Products retrieved successfully", _products));
+      }
+      else{
+        next(new NotFoundError("No such product"));
+      }
     }
   } catch (error) {
     next(new InternalServerError("Failed to get products"));
   }
 }
 
-export async function deleteProduct(request: Request, response: Response, next: NextFunction) {
+export async function deleteProductHandler(request: Request, response: Response, next: NextFunction) {
   try {
-    const deletedProd = await Products.findByIdAndDelete(request.params.productId);
+    const deletedProd = deleteProductById(request.params.productId);
     if (!deletedProd) {
       next(new NotFoundError("Product not found"));
       return;
@@ -59,16 +65,17 @@ export async function deleteProduct(request: Request, response: Response, next: 
   }
 }
 
-export async function updateProduct(request: Request, response: Response, next: NextFunction) {
+export async function updateProductHandler(request: Request, response: Response, next: NextFunction) {
   try {
     const productId = request.params.productId;
-    const updatedProduct = await Products.findByIdAndUpdate(productId, request.body, { new: true });
+    const updatedProduct = await updateProduct(productId, request.body);
     if (!updatedProduct) {
       next(new NotFoundError("Product not found"));
       return;
     }
-    next(new SuccessResponse<Product>("Product updated successfully", updatedProduct));
+    next(new SuccessResponse<ProductDocument>("Product updated successfully", updatedProduct));
   } catch (error) {
     next(new InternalServerError("Failed to update product"));
   }
 }
+
