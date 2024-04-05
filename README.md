@@ -29,7 +29,8 @@ The minimum requirements of the project.
    Special users with certain privileges
 
 - Add a new product, update info of a product, remove a product
-
+4. Order & Order Item
+- Create, Update, Delete, Get
 
 ## Deployment
 https://groupbackend-rlb5.onrender.com/
