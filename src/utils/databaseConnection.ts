@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { config } from "./config";
 import { logger } from "./logger";
 
-async function db() {
+async function databaseConnection() {
   mongoose.set("strictQuery", false);
   if (config.MONGODB_URI) {
     logger.info("connecting to", config.MONGODB_URI);
@@ -21,4 +21,4 @@ async function db() {
   }
 }
 
-export default db;
+export default databaseConnection;

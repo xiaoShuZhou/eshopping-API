@@ -14,6 +14,7 @@ const createUser = async (User: UserDocument): Promise<UserDocument> => {
   try {
     return await User.save();
   } catch (error) {
+    console.error("Error creating user:", error); 
     throw new Error("Failed to create user");
   }
 };

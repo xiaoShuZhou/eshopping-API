@@ -4,7 +4,7 @@ import cors from "cors";
 
 import { requestLogger } from "../middlewares/requestLogger";
 import passport from "passport";
-import { jwtStrategy } from "../config/passport";
+import { jwtStrategy } from "./passport";
 import responseHandler from "../middlewares/responseHandler";
 
 function serverPipeline() {

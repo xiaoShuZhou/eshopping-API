@@ -1,6 +1,6 @@
 import supertest from "supertest";
 import { sign } from "jsonwebtoken";
-import serverPipeline from "../utils/server";
+import serverPipeline from "../utils/serverPipeLine";
 import connect, { MongoHelper } from "../utils/db_test_helper";
 import { Payload } from "../types/User";
 import User from "../models/User";

@@ -15,7 +15,6 @@ import {
   updateProduct,
 } from "../services/product.service";
 import { ProductInput } from "../schema/product.schema";
-import { validateCategory } from "../utils/validateCategory";
 
 export async function createProductHandler(
   request: Request,
@@ -24,7 +23,6 @@ export async function createProductHandler(
 ) {
   try {
     const productInput: ProductInput["body"] = request.body;
-    await validateCategory(productInput);
     const newProduct = await createProduct(new Products(productInput));
     next(
       new CreatedResponse<ProductDocument>(

@@ -14,9 +14,12 @@ export async function createUser(request: Request, response: Response, next: Nex
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     const userData = request.body;
+    console.log(userData, "user data sean");
     userData.password = hashedPassword;
     const newData = new User(userData);
+    console.log(newData, "new data");
     const newUser = await usersService.createUser(newData);
+    console.log(newUser, "new user");
     response.status(201).json(newUser);
   } catch (error) {
     next(new InternalServerError());
