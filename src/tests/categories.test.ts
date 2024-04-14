@@ -1,8 +1,8 @@
 import supertest from "supertest";
 import serverPipeline from "../utils/serverPipeLine";
 import Categories from "../models/Category";
-import connect, { MongoHelper } from "../utils/db_test_helper";
-import { createCategory } from "../services/category.service";
+import connect, { MongoHelper } from "./db_test_helper";
+import { createCategory } from "../services/categoryService";
 import { Payload } from "../types/User";
 import { sign } from "jsonwebtoken";
 import User from "../models/User";

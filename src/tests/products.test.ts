@@ -1,12 +1,12 @@
 import supertest from "supertest";
 import { sign } from "jsonwebtoken";
 import serverPipeline from "../utils/serverPipeLine";
-import connect, { MongoHelper } from "../utils/db_test_helper";
+import connect, { MongoHelper } from "./db_test_helper";
 import { Payload } from "../types/User";
 import User from "../models/User";
 import { adminUser, fakeProduct } from "./fakeAdmin";
 import Product from "../models/Product";
-import { createProduct } from "../services/product.service";
+import { createProduct } from "../services/productService";
 
 jest.spyOn(console, "error").mockImplementation(() => {});
 jest.spyOn(console, "log").mockImplementation(() => {});

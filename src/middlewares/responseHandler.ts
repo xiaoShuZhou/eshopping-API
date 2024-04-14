@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { ApiError } from "../errors/ApiError";
+import { ApiError } from "../utils/errors/ApiError";
 import { logger } from "../utils/logger";
-import { ApiResponse } from "../responses/apiResponse";
+import { ApiResponse } from "./apiResponse";
 
 function responseHandler<T>(result: ApiResponse<T>, _: Request, response: Response, next: NextFunction) {
   if (result instanceof ApiError) {

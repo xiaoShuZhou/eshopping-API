@@ -1,6 +1,6 @@
 import mongoose, { Document } from "mongoose";
 import { transformSchema } from "../utils/transform";
-import { ProductDocument } from "../types/Product";
+import { Product } from "../types/Product";
 
 const ProductSchema = new mongoose.Schema({
   title: {
@@ -15,8 +15,8 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  categoryId: {
-    type: String,
+  category: {
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: "Categories",
   },
@@ -24,4 +24,5 @@ const ProductSchema = new mongoose.Schema({
 
 transformSchema(ProductSchema);
 
-export default mongoose.model<ProductDocument>("Products", ProductSchema);
+export type ProductDocument = Document & Product;
+export default mongoose.model<ProductDocument>("Product", ProductSchema);

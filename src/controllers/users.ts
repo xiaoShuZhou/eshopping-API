@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import User from "../models/User";
-import { InternalServerError } from "../errors/ApiError";
+import { InternalServerError } from "../utils/errors/ApiError";
 import usersService from "../services/userService";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -14,12 +14,12 @@ export async function createUser(request: Request, response: Response, next: Nex
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     const userData = request.body;
-    console.log(userData, "user data sean");
     userData.password = hashedPassword;
+    console.log(userData, "userData");
     const newData = new User(userData);
-    console.log(newData, "new data");
+    console.log(newData, "newData");
     const newUser = await usersService.createUser(newData);
-    console.log(newUser, "new user");
+    console.log(newUser, "newUser");
     response.status(201).json(newUser);
   } catch (error) {
     next(new InternalServerError());

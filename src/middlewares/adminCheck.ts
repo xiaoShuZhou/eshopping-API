@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { logger } from "../utils/logger";
 import passport from "passport";
 import { User } from "../types/User";
-import { InternalServerError, ForbiddenError } from "../errors/ApiError";
+import { InternalServerError, ForbiddenError } from "../utils/errors/ApiError";
 
 const isModifyingOperation = (method: string): boolean => {
   return ["POST", "PUT", "PATCH", "DELETE"].includes(method.toUpperCase());

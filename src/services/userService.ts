@@ -1,4 +1,4 @@
-import { NotFoundError } from "../errors/ApiError";
+import { NotFoundError } from "../utils/errors/ApiError";
 import User, { UserDocument } from "../models/User";
 
 

@@ -1,10 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 import { Order } from '../types/Order';
-import { OrderItemSchema } from './OrderItem';
-
-
-
+import OrderItem from './OrderItem';
 export const OrderSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,

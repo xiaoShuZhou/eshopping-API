@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 import { Document } from "mongoose";
+import { Category } from "./Category";
 
-export interface ProductDocument extends mongoose.Document{
+export type Product = {
   id: string;
   title: string;
   price: number;
@@ -9,19 +10,3 @@ export interface ProductDocument extends mongoose.Document{
   category: Category;
 }
 
-export interface Category {
-  createdAt: string;
-  id: string;
-}
-
-export type CategoryDocument = Document & Category;
-
-export interface Filters {
-  title?: string;
-  categoryId?: string;
-}
-export interface Query extends Filters {
-  skip?: number;
-  limit?: number;
-  pid?: string;
-}

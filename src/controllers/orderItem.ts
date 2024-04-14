@@ -7,7 +7,7 @@ import {
   ForbiddenError,
   InternalServerError,
   NotFoundError,
-} from '../errors/ApiError';
+} from '../utils/errors/ApiError';
 
 import OrderItem,{OrderItemDocument} from '../models/OrderItem';
 import orderItemService from '../services/orderItemService';

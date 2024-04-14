@@ -7,7 +7,7 @@ import {
   ForbiddenError,
   InternalServerError,
   NotFoundError,
-} from '../errors/ApiError';
+} from '../utils/errors/ApiError';
 
 
 import Order, { OrderDocument } from '../models/Order';
