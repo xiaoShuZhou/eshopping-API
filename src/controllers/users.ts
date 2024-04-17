@@ -5,21 +5,23 @@ import usersService from "../services/userService";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { Payload } from "../types/User"
+const cloudinary = require('../utils/cloudinary')
 
 dotenv.config({ path: ".env" });
 
 export async function createUser(request: Request, response: Response, next: NextFunction) {
   try {
     const { password } = request.body;
+
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
+
     const userData = request.body;
     userData.password = hashedPassword;
-    console.log(userData, "userData");
+
     const newData = new User(userData);
-    console.log(newData, "newData");
     const newUser = await usersService.createUser(newData);
-    console.log(newUser, "newUser");
     response.status(201).json(newUser);
   } catch (error) {
     next(new InternalServerError());
@@ -128,12 +130,47 @@ export async function login(request: Request, response: Response, next: NextFunc
     }
     // Create and return a JWT token. then store the token in local storage in frontend
     const JWT_SECRET = process.env.JWT_SECRET as string;
-    console.log(JWT_SECRET, "jwt");
     const token = jwt.sign({ email: user.email, id: user._id }, JWT_SECRET, { expiresIn: "3h" });
-    response.status(200).json({ user, token });
+    response.status(200).json(token);
 
   } catch (error) {
     next(new InternalServerError());
   }
 }
-  
+
+export async function verifyToken(request: Request, response: Response, next: NextFunction) {
+  try {
+    const token = request.headers.authorization?.split(" ")[1];
+    if (!token) {
+      response.status(403).json({ message: "Token not provided" });
+      return;
+    }
+    const JWT_SECRET = process.env.JWT_SECRET as string;
+    const decodedData = jwt.verify(token, JWT_SECRET);
+    response.status(200).json(decodedData);
+  } catch (error) {
+    next(new InternalServerError());
+  }
+}
+
+export async function getUserProfileByToken(request: Request, response: Response, next: NextFunction) {
+  try {
+    const token = request.headers.authorization?.split(" ")[1];
+    console.log(token, "token");
+    if (!token) {
+      response.status(403).json({ message: "Token not provided" });
+      return;
+    }
+    const JWT_SECRET = process.env.JWT_SECRET as string;
+    const decodedData = jwt.verify(token, JWT_SECRET) as Payload;
+    const user = await usersService.findUserByEmail(decodedData.email);
+    if (!user) {
+      response.status(404).json({ message: "User not found" });
+      return;
+    }
+    response.status(200).json(user);
+  } catch (error) {
+    console.log(error);
+    next(new InternalServerError());
+  }
+}

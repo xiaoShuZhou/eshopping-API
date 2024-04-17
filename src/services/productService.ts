@@ -33,7 +33,7 @@ const getProductById = async (productId: string): Promise<ProductDocument | null
   try {
     return await
     Product
-    .findById(productId);
+    .findById(productId).populate("category")
   } catch (error) {
     throw new NotFoundError();
   }
@@ -43,7 +43,7 @@ const getAllProducts = async (): Promise<ProductDocument[]> => {
   try {
     return await
     Product
-    .find();
+    .find().populate("category");
   } catch (error) {
     throw new NotFoundError();
   }

@@ -13,8 +13,8 @@ function serverPipeline() {
   app.use(express.static("dist"));
   app.use(express.json());
   app.use(requestLogger);
-  app.use(passport.initialize());
-  passport.use(jwtStrategy);
+  // app.use(passport.initialize());
+  // passport.use(jwtStrategy);
   routes(app);
   app.use(responseHandler);
 

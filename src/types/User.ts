@@ -10,5 +10,5 @@ export type User = {
 
 export type Payload = {
   email: string;
-  _id: string;
+  id: string;
 };
