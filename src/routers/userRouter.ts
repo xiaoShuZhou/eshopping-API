@@ -2,8 +2,7 @@
 import express from "express";
 import passport from "passport";
 import admincheck from "../middlewares/adminCheck";
-const multer = require('multer')
-const upload = multer({ dest: 'uploads/' })
+
 
 import { createUser, deleteUser, getUser, getAllUsers, updateUser,login,forgetPassword, changePassword, getUserProfileByToken } from "../controllers/users";
 
@@ -13,7 +12,7 @@ router.get("/", getAllUsers);
 
 router.get("/:userId", getUser);
 
-router.post("/", upload.single('avatar'),createUser);
+router.post("/", createUser);
 
 router.post("/profile", getUserProfileByToken);
 
