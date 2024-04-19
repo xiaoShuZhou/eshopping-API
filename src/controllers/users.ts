@@ -44,6 +44,7 @@ export async function getUser(request: Request, response: Response, next: NextFu
       response.status(404).json({ message: "User not found" });
       return;
     }
+    console.log(user, "user");
     response.status(200).json(user);
   } catch (error) {
     next(new InternalServerError());
@@ -156,7 +157,6 @@ export async function verifyToken(request: Request, response: Response, next: Ne
 export async function getUserProfileByToken(request: Request, response: Response, next: NextFunction) {
   try {
     const token = request.headers.authorization?.split(" ")[1];
-    console.log(token, "token");
     if (!token) {
       response.status(403).json({ message: "Token not provided" });
       return;

@@ -3,6 +3,7 @@ import { NotFoundError, InternalServerError } from "../utils/errors/ApiError";
 import productsService from "../services/productService";
 import Product from "../models/Product";
 
+
 export const getAllProducts = async (request: Request, response: Response, next: NextFunction) => {
   try {
     const products = await productsService.getAllProducts();
@@ -61,3 +62,24 @@ export const deleteProduct = async (request: Request, response: Response, next: 
   }
 }
 
+// In controllers/products.ts
+
+export const getProductsByFilters = async (request: Request, response: Response, next: NextFunction) => {
+  const { title, priceMin, priceMax, categoryId } = request.query;
+
+  try {
+    const filters = {
+      title: title as string | undefined,
+      priceMin: priceMin ? parseFloat(priceMin as string) : undefined,
+      priceMax: priceMax ? parseFloat(priceMax as string) : undefined,
+      categoryId: categoryId as string | undefined
+    };
+
+    const products = await productsService.getProductsByFilters(filters);
+    console.log(products);
+    response.status(200).json(products);
+  } catch (error) {
+    console.error("Error fetching products by filters:", error);
+    next(new InternalServerError());
+  }
+}

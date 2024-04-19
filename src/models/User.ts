@@ -1,6 +1,7 @@
 import mongoose, { Document } from 'mongoose';
 
 import { User } from '../types/User';
+import { transformSchema } from "../utils/transform";
 
 const UserSchema = new mongoose.Schema({
   firstName: {
@@ -37,5 +38,6 @@ const UserSchema = new mongoose.Schema({
 });
 
 export type UserDocument = Document & User;
+transformSchema(UserSchema);
 
 export default mongoose.model<UserDocument>('User', UserSchema);

@@ -10,3 +10,9 @@ export type Product = {
   category: Category;
 }
 
+export type FilterParams ={
+  title?: string;
+  priceMin?: number;
+  priceMax?: number;
+  categoryId?: string;
+}

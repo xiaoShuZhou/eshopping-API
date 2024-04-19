@@ -1,5 +1,7 @@
 import Product, { ProductDocument } from "../models/Product";
 import { NotFoundError, InternalServerError } from "../utils/errors/ApiError";
+import { FilterQuery } from "mongoose";
+import { FilterParams } from "../types/Product";
 
 const createProduct = async (productData: ProductDocument): Promise<ProductDocument> => {
   try {
@@ -50,14 +52,31 @@ const getAllProducts = async (): Promise<ProductDocument[]> => {
 }
 
 
-// const getProducts = async (filters: Filters): Promise<ProductDocument[]> => {
-//   try {
-//     return await
-//     Product
-//     .find(filters);
-//   } catch (error) {
-//     throw new NotFoundError();
-//   }
-// }
 
-export default { createProduct, updateProduct, deleteProduct, getProductById, getAllProducts };
+
+const getProductsByFilters = async (filters: FilterParams): Promise<ProductDocument[]> => {
+  const query: FilterQuery<ProductDocument> = {};
+
+  if (filters.title) {
+    query.title = { $regex: filters.title, $options: "i" }; // Case-insensitive search
+  }
+  if (filters.priceMin !== undefined) {
+    query.price = { ...query.price, $gte: filters.priceMin };
+  }
+  if (filters.priceMax !== undefined) {
+    query.price = { ...query.price, $lte: filters.priceMax };
+  }
+  if (filters.categoryId !== undefined) {
+    query.category = filters.categoryId;
+  }
+
+  try {
+    return await Product.find(query).populate("category");
+  } catch (error) {
+    throw new InternalServerError();
+  }
+}
+
+
+
+export default { createProduct, updateProduct, deleteProduct, getProductById, getAllProducts, getProductsByFilters};
