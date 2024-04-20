@@ -7,6 +7,7 @@ import Product from './Product';
 export const OrderItemSchema = new Schema({
   product: {
     type: Schema.Types.ObjectId,
+    required: true,
     ref: 'Product'
   },
   quantity: {

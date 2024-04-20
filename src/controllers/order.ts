@@ -37,9 +37,10 @@ export async function deleteOrder(request: Request, response: Response, next: Ne
     }
 }
 
-export async function updateOrder(request: Request, response: Response, next: NextFunction) {
+
+export async function addOrderItemToOrder(request: Request, response: Response, next: NextFunction) {
     try {
-        const order = await orderService.updateOrder(request.params.orderId, request.body);
+        const order = await orderService.addOrderItemToOrder(request.params.orderId, request.params.orderItemId);
         if (!order) {
             response.status(404).json({ message: 'Order not found' });
             return;
@@ -50,14 +51,19 @@ export async function updateOrder(request: Request, response: Response, next: Ne
     }
 }
 
-export async function getAllOrders(request: Request, response: Response, next: NextFunction) {
+export async function deleteOrderItemFromOrder(request: Request, response: Response, next: NextFunction) {
     try {
-        const orders = await orderService.getAllOrders();
-        response.status(200).json(orders);
+        const order = await orderService.deleteOrderItemFromOrder(request.params.orderId, request.params.orderItemId);
+        if (!order) {
+            response.status(404).json({ message: 'Order not found' });
+            return;
+        }
+        response.status(200).json(order);
     } catch (error) {
         next(new InternalServerError());
     }
 }
+
 
 export async function findOrderById(request: Request, response: Response, next: NextFunction) {
     try {

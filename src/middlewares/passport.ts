@@ -5,7 +5,7 @@ import { Payload, User } from "../types/User";
 import dotenv from "dotenv";
 
 import userService from "../services/userService";
-import { logger } from "./logger";
+import { logger } from "../utils/logger";
 
 dotenv.config({ path: ".env" });
 const JWT_SECRET = process.env.JWT_SECRET as string;

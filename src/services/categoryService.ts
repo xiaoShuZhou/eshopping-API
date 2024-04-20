@@ -39,10 +39,10 @@ const updateCategory = async (categoryId: string, categoryData: Partial<Category
 }
 
 const deleteCategoryById = async (categoryId: string): Promise<boolean> => {
+
   try {
-    const deletedCategory = await
-    Category
-    .findByIdAndDelete(categoryId);
+    const deletedCategory = await Category.findByIdAndDelete(categoryId);
+    console.log(deletedCategory);
     return !!deletedCategory;
   } catch (error) {
     throw new NotFoundError();

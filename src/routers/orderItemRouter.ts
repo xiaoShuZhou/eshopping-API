@@ -1,17 +1,16 @@
 import express from "express";
-import {createOrderItem, updateOrderItemQuantity,deleteOrderItem,getAllOrderItems,getOrderItem} from "../controllers/orderItem";
+import {createOrderItem, increaseOrderItemQuantity,decreaseOrderItemQuantity,deleteOrderItem} from "../controllers/orderItem";
 import passport from "passport";
 
 const router = express.Router();
 
-router.post("/", passport.authenticate("jwt", { session: false }),createOrderItem);
+router.post("/", createOrderItem);
 
-router.put("/:orderItemId",passport.authenticate("jwt", { session: false }), updateOrderItemQuantity);
+router.put("/increase/:orderItemId", increaseOrderItemQuantity);
 
-router.get("/",passport.authenticate("jwt", { session: false }), getAllOrderItems);
+router.put("/decrease/:orderItemId", decreaseOrderItemQuantity);
 
-router.get("/:orderItemId",passport.authenticate("jwt", { session: false }), getOrderItem);
+router.delete("/:orderId/items/:orderItemId", deleteOrderItem);
 
-router.delete("/:orderItemId",passport.authenticate("jwt", { session: false }), deleteOrderItem);
 
 export default router;

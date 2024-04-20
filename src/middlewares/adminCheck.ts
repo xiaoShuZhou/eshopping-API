@@ -1,39 +1,15 @@
+// if user is an admin => create category/ product
 import { NextFunction, Request, Response } from "express";
-import { logger } from "../utils/logger";
-import passport from "passport";
-import { User } from "../types/User";
-import { InternalServerError, ForbiddenError } from "../utils/errors/ApiError";
+import { UserDocument } from "../models/User";
+import { ForbiddenError } from "../utils/errors/ApiError";
 
-const isModifyingOperation = (method: string): boolean => {
-  return ["POST", "PUT", "PATCH", "DELETE"].includes(method.toUpperCase());
-};
-
-const adminCheck = (
-  request: Request,
-  response: Response,
-  next: NextFunction
-) => {
-  passport.authenticate(
-    "jwt",
-    { session: false },
-    (error: Error, user: User) => {
-      if (error) {
-        logger.error("Error in admin check middleware: " + error.message);
-        return next(new InternalServerError("Authenticator error"));
-      }
-      if (
-        isModifyingOperation(request.method) &&
-        user &&
-        user.role === "admin"
-      ) {
-        logger.info("Admin check: User is an admin");
-        next();
-      } else {
-        logger.error("Admin check: User is not an admin");
-        return next(new ForbiddenError("Forbidden"));
-      }
-    }
-  )(request, response, next);
+const adminCheck = (request: Request, _: Response, next: NextFunction) => {
+  const userInformation = request.user as UserDocument;
+  if (userInformation.role === "admin") {
+    next();
+    return;
+  }
+  next(new ForbiddenError("You do not have permission."));
 };
 
 export default adminCheck;

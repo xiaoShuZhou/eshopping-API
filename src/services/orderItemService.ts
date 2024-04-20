@@ -20,25 +20,36 @@ const deleteOrderItem = async (orderItemId: string): Promise<boolean> => {
   }
 }
 
-const getOneOrderItem = async (orderItemId: string): Promise<OrderItemDocument | null> => {
+const increaseOrderItemQuantity = async (orderItemId: string): Promise<OrderItemDocument | null> => {
   try {
-    return await
-    OrderItem
-    .findById(orderItemId); 
+    const orderItem = await OrderItem.findById(orderItemId);
+    if (!orderItem) {
+      throw new NotFoundError();
+    }
+    orderItem.quantity += 1;
+    return await orderItem.save();
   } catch (error) {
     throw new NotFoundError();
   }
 }
 
-const getAllOrderItems = async (): Promise<OrderItemDocument[]> => {
+const decreaseOrderItemQuantity = async (orderItemId: string): Promise<OrderItemDocument | null> => {
   try {
-    return await
-    OrderItem
-    .find();
+    const orderItem = await OrderItem
+    .findById(orderItemId);
+    if (!orderItem) {
+      throw new NotFoundError();
+    }
+    orderItem.quantity -= 1;
+    return await orderItem.save();
   } catch (error) {
     throw new NotFoundError();
   }
 }
 
 
-export default { createOrderItem, deleteOrderItem,getOneOrderItem, getAllOrderItems};
+
+
+
+
+export default { createOrderItem, deleteOrderItem, increaseOrderItemQuantity, decreaseOrderItemQuantity};

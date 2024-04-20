@@ -1,18 +1,18 @@
 import express from "express";
-import { createOrder, deleteOrder, updateOrder, getAllOrders, findOrderById } from "../controllers/order";
+import { createOrder, deleteOrder,  findOrderById,addOrderItemToOrder,deleteOrderItemFromOrder } from "../controllers/order";
 import passport from "passport";
 
 const router = express.Router();
 
-router.post("/", passport.authenticate("jwt", { session: false }),createOrder);
+router.post("/", createOrder);
 
-router.delete("/:orderId", passport.authenticate("jwt", { session: false }),deleteOrder);
-
-router.put("/:orderId", passport.authenticate("jwt", { session: false }),updateOrder);
-
-router.get("/", passport.authenticate("jwt", { session: false }),getAllOrders);
+router.delete("/:orderId", deleteOrder);
 
 router.get("/:orderId", passport.authenticate("jwt", { session: false }),findOrderById);
+
+router.put("/:orderId/items/:orderItemId", addOrderItemToOrder);
+
+router.delete("/:orderId/items/:orderItemId", deleteOrderItemFromOrder);
 
 
 export default router;

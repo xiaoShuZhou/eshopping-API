@@ -8,6 +8,24 @@ const createOrder = async (orderData: OrderDocument): Promise<OrderDocument> => 
   }
 }
 
+const addOrderItemToOrder = async (orderId: string, orderItemId: string): Promise<OrderDocument | null> => {
+  try {
+    return await Order.findByIdAndUpdate
+    (orderId, { $push: { items: orderItemId } }, { new: true });
+  } catch (error) {
+    throw new Error("Failed to add order item to order");
+  }
+}
+
+const deleteOrderItemFromOrder = async (orderId: string, orderItemId: string): Promise<OrderDocument | null> => {
+  try {
+    return await Order.findByIdAndUpdate
+    (orderId, { $pull: { items: orderItemId } }, { new: true });
+  } catch (error) {
+    throw new Error("Failed to delete order item from order");
+  }
+}
+
 const deleteOrder = async (orderId: string): Promise<boolean> => {
   try {
     const deletedOrder = await
@@ -49,4 +67,4 @@ const findOrderById = async (orderId: string): Promise<OrderDocument | null> => 
 }
 
 
-export default { createOrder, deleteOrder, updateOrder, getAllOrders, findOrderById};
+export default { createOrder, addOrderItemToOrder, deleteOrderItemFromOrder, deleteOrder, updateOrder, getAllOrders, findOrderById};
