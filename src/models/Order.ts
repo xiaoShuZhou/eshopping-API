@@ -1,4 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose';
+import { transformSchema } from "../utils/transform";
 
 import { Order } from '../types/Order';
 import OrderItem from './OrderItem';
@@ -18,6 +19,7 @@ export const OrderSchema = new Schema({
 
 });
 
+transformSchema(OrderSchema);
 export type OrderDocument = Document & Order;
 
 export default mongoose.model<OrderDocument>('Order', OrderSchema);

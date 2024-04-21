@@ -16,9 +16,24 @@ import orderService from '../services/orderService';
 
 export async function createOrder(request: Request, response: Response, next: NextFunction) {
     try {
-        const newOrder = new Order(request.body);
-        const order = await orderService.createOrder(newOrder);
+        const { user, items } = request.body;
+        console.log({ user, items }, 'user');
+        if (!user || !items) {
+            next(new BadRequest('User and items are required'));
+            return;
+        }
+        const order = await orderService.createOrder(user, items);
+
         response.status(201).json(order);
+    } catch (error) {
+        next(new InternalServerError());
+    }
+}
+
+export async function getOrdersByUserId(request: Request, response: Response, next: NextFunction) {
+    try {
+        const orders = await orderService.getOrdersByUserId(request.params.userId);
+        response.status(200).json(orders);
     } catch (error) {
         next(new InternalServerError());
     }
@@ -67,13 +82,16 @@ export async function deleteOrderItemFromOrder(request: Request, response: Respo
 
 export async function findOrderById(request: Request, response: Response, next: NextFunction) {
     try {
+        console.log(request.params.orderId, 'request.params.orderId');
         const order = await orderService.findOrderById(request.params.orderId);
+        console.log(order, 'order');
         if (!order) {
             response.status(404).json({ message: 'Order not found' });
             return;
         }
         response.status(200).json(order);
     } catch (error) {
+        console.log(error, 'error');
         next(new InternalServerError());
     }
 }

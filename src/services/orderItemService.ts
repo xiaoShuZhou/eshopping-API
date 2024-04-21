@@ -3,7 +3,7 @@ import { NotFoundError } from "../utils/errors/ApiError";
 
 const createOrderItem = async (orderItemData: OrderItemDocument): Promise<OrderItemDocument> => {
   try {
-    return await orderItemData.save();
+    return (await orderItemData.save())
   } catch (error) {
     throw new Error("Failed to create orderItem");
   }
@@ -47,9 +47,15 @@ const decreaseOrderItemQuantity = async (orderItemId: string): Promise<OrderItem
   }
 }
 
+const findOrderItemById = async (orderItemId: string): Promise<OrderItemDocument | null> => {
+  try {
+    return await OrderItem.findById(orderItemId).populate("product");
+  } catch (error) {
+    throw new NotFoundError();
+  }
+}
 
 
 
 
-
-export default { createOrderItem, deleteOrderItem, increaseOrderItemQuantity, decreaseOrderItemQuantity};
+export default { createOrderItem, deleteOrderItem, increaseOrderItemQuantity, decreaseOrderItemQuantity, findOrderItemById};

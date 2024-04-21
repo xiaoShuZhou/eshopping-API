@@ -1,8 +1,10 @@
 import express from "express";
-import {createOrderItem, increaseOrderItemQuantity,decreaseOrderItemQuantity,deleteOrderItem} from "../controllers/orderItem";
+import {createOrderItem, increaseOrderItemQuantity,decreaseOrderItemQuantity,deleteOrderItem,findOrderItemById} from "../controllers/orderItem";
 import passport from "passport";
 
 const router = express.Router();
+
+router.get("/:orderItemId",findOrderItemById)
 
 router.post("/", createOrderItem);
 

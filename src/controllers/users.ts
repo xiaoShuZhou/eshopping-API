@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { Payload } from "../types/User"
 const cloudinary = require('../utils/cloudinary')
+import orderService from "../services/orderService";
 
 dotenv.config({ path: ".env" });
 
@@ -22,6 +23,7 @@ export async function createUser(request: Request, response: Response, next: Nex
 
     const newData = new User(userData);
     const newUser = await usersService.createUser(newData);
+    // const newOrder = await orderService.createOrder({ user: newUser.id });
     response.status(201).json(newUser);
   } catch (error) {
     next(new InternalServerError());

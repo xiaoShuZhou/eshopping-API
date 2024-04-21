@@ -2,6 +2,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 
 import { OrderItem } from '../types/Order';
 import Product from './Product';
+import { transformSchema } from "../utils/transform";
 
 
 export const OrderItemSchema = new Schema({
@@ -16,5 +17,6 @@ export const OrderItemSchema = new Schema({
   }
 }); 
 
+transformSchema(OrderItemSchema);
 export type OrderItemDocument = Document & OrderItem;
 export default mongoose.model<OrderItemDocument>('OrderItem', OrderItemSchema);
