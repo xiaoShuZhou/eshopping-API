@@ -1,7 +1,7 @@
 
 import express from "express";
 import passport from "passport";
-import admincheck from "../middlewares/adminCheck";
+import adminCheck from "../middlewares/adminCheck";
 
 
 import { createUser, deleteUser, getUser, getAllUsers, updateUser,login,forgetPassword, changePassword, getUserProfileByToken } from "../controllers/users";
@@ -14,11 +14,11 @@ router.get("/:userId", getUser);
 
 router.post("/", createUser);
 
-router.post("/profile", getUserProfileByToken);
+router.post("/profile", passport.authenticate("jwt", { session: false }),getUserProfileByToken);
 
-router.put("/:userId", updateUser);
+router.put("/:userId", passport.authenticate("jwt", { session: false }),updateUser);
 
-router.delete("/:userId", passport.authenticate("jwt", { session: false }),deleteUser);
+router.delete("/:userId", passport.authenticate("jwt", { session: false }),adminCheck, deleteUser);
 
 router.post("/forget-password", passport.authenticate("jwt", { session: false }),forgetPassword);
 
