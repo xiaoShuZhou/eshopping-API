@@ -1,3 +1,5 @@
+Website live: https://eshopping-frontend-ad5cxysro-seans-projects-9ba85089.vercel.app/
+Frontend Repo: https://github.com/xiaoShuZhou/eshopping-frontend/tree/master
 
 # ER diagram
 
