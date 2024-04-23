@@ -8,3 +8,5 @@ app.listen(config.PORT, async () => {
   logger.info(`App is running at http://localhost:${config.PORT}`);
   await databaseConnection();
 });
+
+export default app;

@@ -1,13 +1,10 @@
-# Team member
-Xinyuan Zhou, Jingyi Guo, Manni Singh
+
 # ER diagram
 
 ![ER Diagram](readmePic/ER%20diagram.png)
 
 
 ## Features:
-
-The minimum requirements of the project.
 
 1. Products
 
@@ -28,7 +25,7 @@ The minimum requirements of the project.
 3. Admin
    Special users with certain privileges
 
-- Add a new product, update info of a product, remove a product
+- Add a new product, update info of a product, remove a product,add/ delete categories
 4. Order & Order Item
 - Create, Update, Delete, Get
 
