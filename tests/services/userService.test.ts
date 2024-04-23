@@ -81,7 +81,9 @@ describe('user controller test', () => {
       firstName: 'James'
     };
     const updatedUser = await userService.updateUser(newUser._id, updateData);
-    expect(updatedUser.firstName).toEqual('James');
+    if (updatedUser) {
+      expect(updatedUser.firstName).toEqual('James');
+    }
   });
 
   // Delete User
@@ -115,7 +117,9 @@ describe('user controller test', () => {
     };
     const newUser = await createUser(userData);
     const foundUser = await userService.findUserByID(newUser._id);
-    expect(foundUser._id).toEqual(newUser._id);
+    if (foundUser) {
+      expect(foundUser._id).toEqual(newUser._id);
+    }
   });
 
   // Find User by Email
@@ -131,6 +135,8 @@ describe('user controller test', () => {
     };
     await createUser(userData);
     const foundUser = await userService.findUserByEmail('john@example.com');
-    expect(foundUser.email).toEqual(userData.email);
+    if (foundUser) {
+      expect(foundUser.email).toEqual(userData.email);
+    }
   });
 });

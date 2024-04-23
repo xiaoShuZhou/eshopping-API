@@ -45,8 +45,12 @@ describe('category controller test', () => {
     const categoryName = 'Electronics';
     const newCategory = await createCategory(categoryName);
     const foundCategory = await categoryService.getCategoryById(newCategory._id);
-    expect(foundCategory._id.toString()).toEqual(newCategory._id.toString());
-    expect(foundCategory.name).toEqual(categoryName);
+    if (foundCategory) {
+      expect(foundCategory._id.toString()).toEqual(newCategory._id.toString());
+      expect(foundCategory.name).toEqual(categoryName);
+    } else {
+      fail('Category not found');
+    }
   });
 
   // Update Category
@@ -55,7 +59,11 @@ describe('category controller test', () => {
     const newCategory = await createCategory(categoryName);
     const updateData = { name: 'Consumer Electronics' };
     const updatedCategory = await categoryService.updateCategory(newCategory._id, updateData);
-    expect(updatedCategory.name).toEqual(updateData.name);
+    if (updatedCategory) {
+      expect(updatedCategory.name).toEqual(updateData.name);
+    } else {
+      fail('Category not found');
+    }
   });
 
   // Delete Category
