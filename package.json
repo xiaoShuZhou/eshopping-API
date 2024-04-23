@@ -20,7 +20,7 @@
     "zod": "^3.22.4"
   },
   "scripts": {
-    "start": "NODE_ENV=production node dist/app.js",
+    "start": "NODE_ENV=production node dist/src/app.js",
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/app.ts",
     "test": "jest --runInBand --forceExit --detectOpenHandles --coverage  --verbose false",
     "lint": "eslint .",
