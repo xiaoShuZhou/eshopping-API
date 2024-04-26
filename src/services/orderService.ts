@@ -97,5 +97,12 @@ const findOrderById = async (orderId: string): Promise<OrderDocument | null> => 
   }
 }
 
+const getOrder = async (orderId: string): Promise<OrderDocument | null> => {
+  try {
+    return await Order.findById(orderId);
+  } catch (error) {
+    throw new Error("Failed to fetch order");
+  }
+}
 
-export default { createOrder, addOrderItemToOrder, deleteOrderItemFromOrder, deleteOrder,  findOrderById, getOrdersByUserId};
+export default { createOrder, addOrderItemToOrder, deleteOrderItemFromOrder, deleteOrder,  findOrderById, getOrdersByUserId, getOrder};

@@ -9,6 +9,7 @@ import {
   NotFoundError,
 } from '../utils/errors/ApiError';
 
+import OrderItem from '../models/OrderItem';
 
 import Order, { OrderDocument } from '../models/Order';
 import orderService from '../services/orderService';
@@ -41,6 +42,21 @@ export async function getOrdersByUserId(request: Request, response: Response, ne
 
 export async function deleteOrder(request: Request, response: Response, next: NextFunction) {
     try {
+        
+        const order1 = await orderService.getOrder(request.params.orderId);
+        if (!order1) {
+            return response.status(404).json({ message: 'Order not found' });
+        }
+
+        // Attempt to delete all order items associated with the order
+        const orderItemDeletionResults = await OrderItem.deleteMany({ _id: { $in: order1.items } });
+        if (orderItemDeletionResults.deletedCount === 0) {
+            console.log('No order items found or deleted');
+        } else {
+            console.log(`${orderItemDeletionResults.deletedCount} order items deleted`);
+        }
+
+
         const order = await orderService.deleteOrder(request.params.orderId);
         if (!order) {
             response.status(404).json({ message: 'Order not found' });
